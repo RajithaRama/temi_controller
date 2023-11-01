@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "temi-controller"
+version = "0.1.0"
+description = "A planner and controller for Temi as a monitoring robot."
+authors = ["rajitharama <rajitharamanayake@gmail.com>"]
+readme = "README.md"
+packages = [{include = "temi_controller"}]
+
+[tool.poetry.dependencies]
+python = ">=3.10, <3.13"
+pandas = ">=2.1.2"
+numpy = ">=1.26.1"
+pyyaml = "^6.0.1"
+scikit-learn = "^1.3.2"
+paho-mqtt = "^1.6.1"
+
+
+[tool.poetry.group.dev.dependencies]
+ipykernel = "^6.26.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

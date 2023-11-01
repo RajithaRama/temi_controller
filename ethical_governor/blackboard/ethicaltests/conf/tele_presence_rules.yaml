@@ -1,0 +1,7 @@
+- [1, [instructions, action], ( go_forward:caller in instructions ) and ( action != move_forward ), False]
+- [2, [instructions, action], ( go_backward:caller in instructions ) and ( action != move_backward ), False]
+- [3, [instructions, action], ( go_left:caller in instructions ) and ( action != move_left ), False]
+- [4, [instructions, action], ( go_right:caller in instructions ) and ( action != move_right ), False]
+# - [5, [instructions, action], ( action == decline_instruction ) and ( instruction != None ), False]
+- [5, [instructions, action], ( call:caller in instructions ) and ( action != take_call ), False]
+- [6, [stakeholders.robot.on_call, action], stakeholders.robot.on_call and ( action == decline_call ), False]

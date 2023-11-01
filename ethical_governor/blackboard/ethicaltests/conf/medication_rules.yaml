@@ -1,0 +1,3 @@
+- [1, [instructions, action], ( SNOOZE:patient_0 in instructions ) and ( action != snooze ), False]
+- [2, [instructions, action], ( ACKNOWLEDGED:patient_0 in instructions ) and ( action != acknowledge ), False]
+- [3, [stakeholders.patient_0.attached_reminders.state, action], ( stakeholders.patient_0.attached_reminders.state == 3 ) and ( action != record_and_call_careworker ), False]

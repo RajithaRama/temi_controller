@@ -1,0 +1,10 @@
+loader: {module_name: sim_loader, class_name: SimLoader}
+tests:
+  Deontology: { module_name: elder_care_deontology_test, class_name: ElderCareRuleTest, other: {rule_file: elder_care_rules.yaml}}
+  Utilitarian: { module_name: elder_care_utilitarian_test, class_name: ElderCareUtilitarianTest, number_of_outputs: 2, output_names: [Autonomy, Wellbeing], per_user_cols: True, other: {}}
+test_order:
+  - Deontology
+  - Utilitarian
+evaluator: {module_name: PSRB_eldercare_evaluator, class_name: PSRBEvaluator}
+scheduler: {module_name: round_robin_scheduler, class_name: RoundRobin}
+log_file: PSRB_bathroom_dilemma.log
