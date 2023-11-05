@@ -3,12 +3,12 @@ from ethical_governor.ethical_governor import EthicalGovernor
 
 TEST = False
 
+
 class RobotPlanner():
     def __init__(self, governor_conf, robot=None):
         self.robot = rc.RobotController(robot)
         self.env = None
         self.governor = EthicalGovernor(governor_conf)
-        
 
     def step(self):
         self.env = self.get_perception_data()
@@ -19,9 +19,9 @@ class RobotPlanner():
 
         governor_data = self.make_governor_data(behavioural_alternatves)
 
-        print (governor_data)
+        print(governor_data)
         if TEST:
-            ethical_recommendation = [self.go_to_last_seen]
+            ethical_recommendation = [self.stay]
         else:
             ethical_recommendation = self.governor.recommend(governor_data)
 
@@ -60,13 +60,12 @@ class RobotPlanner():
             possible_actions.append(self.go_to_charge)
 
         return possible_actions
-    
 
     def make_governor_data(self, behaviours):
         data = {}
-    
+
         stakeholders = {}
-                
+
         agent_data = {}
         if self.env.followee.seen:
             agent_data['seen'] = True
@@ -75,19 +74,20 @@ class RobotPlanner():
             agent_data['seen_location'] = self.env.followee.location
         else:
             agent_data['seen'] = False
-    
+
         agent_data['last_seen_time'] = self.env.followee.last_seen_time
         agent_data['last_seen_pos'] = self.env.followee.last_seen_pos
-        agent_data['last_seen_location'] = self.env.followee.last_seen_location if self.env.followee.last_seen_pos else None
-        
+        agent_data[
+            'last_seen_location'] = self.env.followee.last_known_location
+        agent_data['last_moved_time'] = self.env.followee.last_moved_time
+
         stakeholders['followee'] = agent_data
-        
 
         robot_data = {'pos': self.env.robot.pos, 'location': self.env.robot.location,
                       'not_follow_request': self.env.robot.not_follow_request,
-                      'not_follow_locations': self.env.robot.not_follow_locations.copy(), 'battery_level': self.env.robot.battery_level, 
+                      'not_follow_locations': self.env.robot.not_follow_locations.copy(),
+                      'battery_level': self.env.robot.battery_level,
                       'instruction_list': self.env.robot.instruction_list.copy()}
-        
 
         stakeholders['robot'] = robot_data
 
@@ -107,7 +107,6 @@ class RobotPlanner():
 
         # print("robot env: " + str(data))
         return data
-
 
     def execute(self, ethical_recommendation):
         if TEST:
@@ -131,26 +130,26 @@ class RobotPlanner():
             else:
                 distances = []
                 for recommendation in ethical_recommendation:
-                    next_pos = self.robot.simulate_next_pos(recommendation)
-                    distances.append((recommendation, self.robot.get_shortest_distance(start=next_pos, target=self.env.followee.last_seen_pos)))
+                    next_location = self.robot.simulate_next_location(recommendation)
+                    distances.append((recommendation, self.robot.get_shortest_distance(start=next_location,
+                                                                                       target=self.env.followee.last_seen_pos)))
 
                 distances.sort(key=lambda x: x[1])
                 executing_action = distances[0][0]
 
                 executing_action()
 
-
     def charge(self):
-        self.robot.charge()
+        self.robot.go_to_location('home base')
 
     def get_perception_data(self):
         if TEST:
             perception_data = rc.PerceptionData()
-            
+
             perception_data.robot.battery_level = 100
             perception_data.robot.location = 'Bedroom'
             perception_data.robot.pos = (8, 8)
-            perception_data.robot.instruction_list = [rc.Instruction('do_not_follow_to', ['Kitchen'])]
+            perception_data.robot.instruction_list = [rc.Instruction('do_not_follow_to', ['bedroom-a bed'])]
             perception_data.robot.not_follow_locations = []
             perception_data.robot.not_follow_request = []
 
@@ -164,13 +163,13 @@ class RobotPlanner():
             perception_data.time = 10
             perception_data.followee_history = int(0)
             perception_data.followee_health_score = 1
-            perception_data.map = rc.map()
+            perception_data.map = rc.map(1)
 
             # print(perception_data.followee_history)
             return perception_data
-            
+
         return self.robot.get_perception_data()
-    
+
     def follow(self):
         self.robot.follow()
 
@@ -178,17 +177,33 @@ class RobotPlanner():
         self.robot.go_to_last_seen()
 
     def move_away(self):
-        self.robot.move_away()
+        # move to the closest allowed location
+        map = self.robot.get_map()
+        node_distance = map.get_node_distance_sorted()
+        for node, distance in node_distance:
+            if node in self.env.robot.not_follow_locations:
+                continue
+            else:
+                self.robot.go_to_location(node)
 
     def stay(self):
+        if TEST:
+            return
         self.robot.stay()
 
     def go_to_charge(self):
-        self.robot.go_to_charge()    
+        self.robot.go_to_charge()
 
-    
 
 if __name__ == "__main__":
     TEST = True
     robot = RobotPlanner(governor_conf='elder_care_sim_PSRB.yaml')
-    robot.step()
+    try:
+        robot.step()
+    except IOError:
+        print(IOError)
+
+    print(type(robot.env.map.location_data))
+    print(robot.env.map.location_data.nodes)
+    print(robot.env.map.location_data.edges)
+    print(robot.env.map.get_closest_locations('kitchens'))
