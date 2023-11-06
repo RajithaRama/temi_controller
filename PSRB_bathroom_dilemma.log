@@ -1,0 +1,315 @@
+2023-11-06 18:43:01,362 - blackboard - Loaded the data to the blackboard.
+2023-11-06 18:43:01,364 - blackboard - Starting tests...
+2023-11-06 18:43:01,375 - blackboard - Running Deontology test.
+2023-11-06 18:43:01,375 - elder_care_deontology_test - Running ethical_governor.blackboard.ethicaltests.elder_care_deontology_test...
+2023-11-06 18:43:01,375 - elder_care_deontology_test - Testing action: <bound method RobotPlanner.go_to_last_seen of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:43:01,376 - elder_care_deontology_test - Variable: stakeholders.followee.seen_locationnot found in env.
+2023-11-06 18:43:01,376 - elder_care_deontology_test - Action <bound method RobotPlanner.go_to_last_seen of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>> : Not permissible since it broke rules [2]
+2023-11-06 18:43:01,376 - elder_care_deontology_test - Testing action: <bound method RobotPlanner.stay of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:43:01,377 - elder_care_deontology_test - Variable: stakeholders.followee.seen_locationnot found in env.
+2023-11-06 18:43:01,377 - elder_care_deontology_test - Action <bound method RobotPlanner.stay of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>> : Permissible
+2023-11-06 18:43:01,377 - elder_care_deontology_test - ethical_governor.blackboard.ethicaltests.elder_care_deontology_test finished.
+2023-11-06 18:43:01,378 - blackboard - Blackboard updated with Deontology test results.
+2023-11-06 18:43:01,378 - blackboard - Running Utilitarian test.
+2023-11-06 18:43:01,378 - elder_care_utilitarian_test - Running ethical_governor.blackboard.ethicaltests.elder_care_utilitarian_test...
+2023-11-06 18:43:01,379 - elder_care_utilitarian_test - Testing action: <bound method RobotPlanner.go_to_last_seen of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:43:21,879 - elder_care_utilitarian_test - Testing action: <bound method RobotPlanner.stay of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:43:26,549 - blackboard - Blackboard updated with Utilitarian test results.
+2023-11-06 18:43:26,549 - blackboard - Testing completed.
+2023-11-06 18:43:26,557 - data_structure - 
+                                                   desirability_score  \
+<bound method RobotPlanner.go_to_last_seen of <...                NaN   
+<bound method RobotPlanner.stay of <robot.robot...                NaN   
+
+                                                   is_breaking_rule  \
+<bound method RobotPlanner.go_to_last_seen of <...             True   
+<bound method RobotPlanner.stay of <robot.robot...            False   
+
+                                                   breaking_rule_ids  \
+<bound method RobotPlanner.go_to_last_seen of <...               [2]   
+<bound method RobotPlanner.stay of <robot.robot...                []   
+
+                                                   followee_autonomy  \
+<bound method RobotPlanner.go_to_last_seen of <...              -0.7   
+<bound method RobotPlanner.stay of <robot.robot...               1.0   
+
+                                                   followee_wellbeing  \
+<bound method RobotPlanner.go_to_last_seen of <...                0.7   
+<bound method RobotPlanner.stay of <robot.robot...           0.456373   
+
+                                                   robot_availability  
+<bound method RobotPlanner.go_to_last_seen of <...                1.0  
+<bound method RobotPlanner.stay of <robot.robot...                1.0  
+2023-11-06 18:43:26,557 - blackboard - Calling the final evaluator.
+2023-11-06 18:43:26,558 - PSRB_eldercare_evaluator - ethical_governor.blackboard.evaluator.PSRB_eldercare_evaluator started evaluation using the data in the blackboard.
+2023-11-06 18:43:26,558 - PSRB_eldercare_evaluator - Evaluating action: <bound method RobotPlanner.go_to_last_seen of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:43:30,268 - blackboard - Loaded the data to the blackboard.
+2023-11-06 18:43:30,268 - blackboard - Starting tests...
+2023-11-06 18:43:30,279 - blackboard - Running Deontology test.
+2023-11-06 18:43:30,279 - elder_care_deontology_test - Running ethical_governor.blackboard.ethicaltests.elder_care_deontology_test...
+2023-11-06 18:43:30,279 - elder_care_deontology_test - Testing action: <bound method RobotPlanner.go_to_last_seen of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:43:30,279 - elder_care_deontology_test - Variable: stakeholders.followee.seen_locationnot found in env.
+2023-11-06 18:43:30,280 - elder_care_deontology_test - Action <bound method RobotPlanner.go_to_last_seen of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>> : Not permissible since it broke rules [2]
+2023-11-06 18:43:30,280 - elder_care_deontology_test - Testing action: <bound method RobotPlanner.stay of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:43:30,280 - elder_care_deontology_test - Variable: stakeholders.followee.seen_locationnot found in env.
+2023-11-06 18:43:30,281 - elder_care_deontology_test - Action <bound method RobotPlanner.stay of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>> : Permissible
+2023-11-06 18:43:30,281 - elder_care_deontology_test - ethical_governor.blackboard.ethicaltests.elder_care_deontology_test finished.
+2023-11-06 18:43:30,283 - blackboard - Blackboard updated with Deontology test results.
+2023-11-06 18:43:30,283 - blackboard - Running Utilitarian test.
+2023-11-06 18:43:30,283 - elder_care_utilitarian_test - Running ethical_governor.blackboard.ethicaltests.elder_care_utilitarian_test...
+2023-11-06 18:43:30,283 - elder_care_utilitarian_test - Testing action: <bound method RobotPlanner.go_to_last_seen of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:43:36,025 - elder_care_utilitarian_test - Testing action: <bound method RobotPlanner.stay of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:43:36,572 - blackboard - Blackboard updated with Utilitarian test results.
+2023-11-06 18:43:36,573 - blackboard - Testing completed.
+2023-11-06 18:43:36,578 - data_structure - 
+                                                   desirability_score  \
+<bound method RobotPlanner.go_to_last_seen of <...                NaN   
+<bound method RobotPlanner.stay of <robot.robot...                NaN   
+
+                                                   is_breaking_rule  \
+<bound method RobotPlanner.go_to_last_seen of <...             True   
+<bound method RobotPlanner.stay of <robot.robot...            False   
+
+                                                   breaking_rule_ids  \
+<bound method RobotPlanner.go_to_last_seen of <...               [2]   
+<bound method RobotPlanner.stay of <robot.robot...                []   
+
+                                                   followee_autonomy  \
+<bound method RobotPlanner.go_to_last_seen of <...              -0.7   
+<bound method RobotPlanner.stay of <robot.robot...               1.0   
+
+                                                   followee_wellbeing  \
+<bound method RobotPlanner.go_to_last_seen of <...                0.7   
+<bound method RobotPlanner.stay of <robot.robot...           0.433343   
+
+                                                   robot_availability  
+<bound method RobotPlanner.go_to_last_seen of <...                1.0  
+<bound method RobotPlanner.stay of <robot.robot...                1.0  
+2023-11-06 18:43:36,578 - blackboard - Calling the final evaluator.
+2023-11-06 18:43:36,579 - PSRB_eldercare_evaluator - ethical_governor.blackboard.evaluator.PSRB_eldercare_evaluator started evaluation using the data in the blackboard.
+2023-11-06 18:43:36,579 - PSRB_eldercare_evaluator - Evaluating action: <bound method RobotPlanner.go_to_last_seen of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:44:07,785 - blackboard - Loaded the data to the blackboard.
+2023-11-06 18:44:07,785 - blackboard - Starting tests...
+2023-11-06 18:44:07,796 - blackboard - Running Deontology test.
+2023-11-06 18:44:07,796 - elder_care_deontology_test - Running ethical_governor.blackboard.ethicaltests.elder_care_deontology_test...
+2023-11-06 18:44:07,796 - elder_care_deontology_test - Testing action: <bound method RobotPlanner.go_to_last_seen of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:44:07,796 - elder_care_deontology_test - Variable: stakeholders.followee.seen_locationnot found in env.
+2023-11-06 18:44:07,797 - elder_care_deontology_test - Action <bound method RobotPlanner.go_to_last_seen of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>> : Not permissible since it broke rules [2]
+2023-11-06 18:44:07,797 - elder_care_deontology_test - Testing action: <bound method RobotPlanner.stay of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:44:07,797 - elder_care_deontology_test - Variable: stakeholders.followee.seen_locationnot found in env.
+2023-11-06 18:44:07,798 - elder_care_deontology_test - Action <bound method RobotPlanner.stay of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>> : Permissible
+2023-11-06 18:44:07,798 - elder_care_deontology_test - ethical_governor.blackboard.ethicaltests.elder_care_deontology_test finished.
+2023-11-06 18:44:07,799 - blackboard - Blackboard updated with Deontology test results.
+2023-11-06 18:44:07,800 - blackboard - Running Utilitarian test.
+2023-11-06 18:44:07,800 - elder_care_utilitarian_test - Running ethical_governor.blackboard.ethicaltests.elder_care_utilitarian_test...
+2023-11-06 18:44:07,800 - elder_care_utilitarian_test - Testing action: <bound method RobotPlanner.go_to_last_seen of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:44:08,563 - elder_care_utilitarian_test - Testing action: <bound method RobotPlanner.stay of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:44:09,018 - blackboard - Blackboard updated with Utilitarian test results.
+2023-11-06 18:44:09,018 - blackboard - Testing completed.
+2023-11-06 18:44:09,023 - data_structure - 
+                                                   desirability_score  \
+<bound method RobotPlanner.go_to_last_seen of <...                NaN   
+<bound method RobotPlanner.stay of <robot.robot...                NaN   
+
+                                                   is_breaking_rule  \
+<bound method RobotPlanner.go_to_last_seen of <...             True   
+<bound method RobotPlanner.stay of <robot.robot...            False   
+
+                                                   breaking_rule_ids  \
+<bound method RobotPlanner.go_to_last_seen of <...               [2]   
+<bound method RobotPlanner.stay of <robot.robot...                []   
+
+                                                   followee_autonomy  \
+<bound method RobotPlanner.go_to_last_seen of <...              -0.7   
+<bound method RobotPlanner.stay of <robot.robot...               1.0   
+
+                                                   followee_wellbeing  \
+<bound method RobotPlanner.go_to_last_seen of <...                0.7   
+<bound method RobotPlanner.stay of <robot.robot...           0.402591   
+
+                                                   robot_availability  
+<bound method RobotPlanner.go_to_last_seen of <...                1.0  
+<bound method RobotPlanner.stay of <robot.robot...                1.0  
+2023-11-06 18:44:09,023 - blackboard - Calling the final evaluator.
+2023-11-06 18:44:09,024 - PSRB_eldercare_evaluator - ethical_governor.blackboard.evaluator.PSRB_eldercare_evaluator started evaluation using the data in the blackboard.
+2023-11-06 18:44:09,024 - PSRB_eldercare_evaluator - Evaluating action: <bound method RobotPlanner.go_to_last_seen of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:44:10,456 - blackboard - Loaded the data to the blackboard.
+2023-11-06 18:44:10,456 - blackboard - Starting tests...
+2023-11-06 18:44:10,468 - blackboard - Running Deontology test.
+2023-11-06 18:44:10,468 - elder_care_deontology_test - Running ethical_governor.blackboard.ethicaltests.elder_care_deontology_test...
+2023-11-06 18:44:10,468 - elder_care_deontology_test - Testing action: <bound method RobotPlanner.go_to_last_seen of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:44:10,470 - elder_care_deontology_test - Variable: stakeholders.followee.seen_locationnot found in env.
+2023-11-06 18:44:10,470 - elder_care_deontology_test - Action <bound method RobotPlanner.go_to_last_seen of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>> : Not permissible since it broke rules [2]
+2023-11-06 18:44:10,470 - elder_care_deontology_test - Testing action: <bound method RobotPlanner.stay of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:44:10,471 - elder_care_deontology_test - Variable: stakeholders.followee.seen_locationnot found in env.
+2023-11-06 18:44:10,471 - elder_care_deontology_test - Action <bound method RobotPlanner.stay of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>> : Permissible
+2023-11-06 18:44:10,471 - elder_care_deontology_test - ethical_governor.blackboard.ethicaltests.elder_care_deontology_test finished.
+2023-11-06 18:44:10,473 - blackboard - Blackboard updated with Deontology test results.
+2023-11-06 18:44:10,473 - blackboard - Running Utilitarian test.
+2023-11-06 18:44:10,473 - elder_care_utilitarian_test - Running ethical_governor.blackboard.ethicaltests.elder_care_utilitarian_test...
+2023-11-06 18:44:10,474 - elder_care_utilitarian_test - Testing action: <bound method RobotPlanner.go_to_last_seen of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:44:10,986 - elder_care_utilitarian_test - Testing action: <bound method RobotPlanner.stay of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:44:11,304 - blackboard - Blackboard updated with Utilitarian test results.
+2023-11-06 18:44:11,304 - blackboard - Testing completed.
+2023-11-06 18:44:11,309 - data_structure - 
+                                                   desirability_score  \
+<bound method RobotPlanner.go_to_last_seen of <...                NaN   
+<bound method RobotPlanner.stay of <robot.robot...                NaN   
+
+                                                   is_breaking_rule  \
+<bound method RobotPlanner.go_to_last_seen of <...             True   
+<bound method RobotPlanner.stay of <robot.robot...            False   
+
+                                                   breaking_rule_ids  \
+<bound method RobotPlanner.go_to_last_seen of <...               [2]   
+<bound method RobotPlanner.stay of <robot.robot...                []   
+
+                                                   followee_autonomy  \
+<bound method RobotPlanner.go_to_last_seen of <...              -0.7   
+<bound method RobotPlanner.stay of <robot.robot...               1.0   
+
+                                                   followee_wellbeing  \
+<bound method RobotPlanner.go_to_last_seen of <...                0.7   
+<bound method RobotPlanner.stay of <robot.robot...           0.400365   
+
+                                                   robot_availability  
+<bound method RobotPlanner.go_to_last_seen of <...                1.0  
+<bound method RobotPlanner.stay of <robot.robot...                1.0  
+2023-11-06 18:44:11,310 - blackboard - Calling the final evaluator.
+2023-11-06 18:44:11,310 - PSRB_eldercare_evaluator - ethical_governor.blackboard.evaluator.PSRB_eldercare_evaluator started evaluation using the data in the blackboard.
+2023-11-06 18:44:11,310 - PSRB_eldercare_evaluator - Evaluating action: <bound method RobotPlanner.go_to_last_seen of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:44:35,922 - blackboard - Loaded the data to the blackboard.
+2023-11-06 18:44:35,922 - blackboard - Starting tests...
+2023-11-06 18:44:35,932 - blackboard - Running Deontology test.
+2023-11-06 18:44:35,933 - elder_care_deontology_test - Running ethical_governor.blackboard.ethicaltests.elder_care_deontology_test...
+2023-11-06 18:44:35,933 - elder_care_deontology_test - Testing action: <bound method RobotPlanner.go_to_last_seen of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:44:35,933 - elder_care_deontology_test - Variable: stakeholders.followee.seen_locationnot found in env.
+2023-11-06 18:44:35,934 - elder_care_deontology_test - Action <bound method RobotPlanner.go_to_last_seen of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>> : Not permissible since it broke rules [2]
+2023-11-06 18:44:35,934 - elder_care_deontology_test - Testing action: <bound method RobotPlanner.stay of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:44:35,934 - elder_care_deontology_test - Variable: stakeholders.followee.seen_locationnot found in env.
+2023-11-06 18:44:35,934 - elder_care_deontology_test - Action <bound method RobotPlanner.stay of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>> : Permissible
+2023-11-06 18:44:35,935 - elder_care_deontology_test - ethical_governor.blackboard.ethicaltests.elder_care_deontology_test finished.
+2023-11-06 18:44:35,936 - blackboard - Blackboard updated with Deontology test results.
+2023-11-06 18:44:35,936 - blackboard - Running Utilitarian test.
+2023-11-06 18:44:35,937 - elder_care_utilitarian_test - Running ethical_governor.blackboard.ethicaltests.elder_care_utilitarian_test...
+2023-11-06 18:44:35,937 - elder_care_utilitarian_test - Testing action: <bound method RobotPlanner.go_to_last_seen of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:44:36,901 - elder_care_utilitarian_test - Testing action: <bound method RobotPlanner.stay of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:44:37,395 - blackboard - Blackboard updated with Utilitarian test results.
+2023-11-06 18:44:37,396 - blackboard - Testing completed.
+2023-11-06 18:44:37,400 - data_structure - 
+                                                   desirability_score  \
+<bound method RobotPlanner.go_to_last_seen of <...                NaN   
+<bound method RobotPlanner.stay of <robot.robot...                NaN   
+
+                                                   is_breaking_rule  \
+<bound method RobotPlanner.go_to_last_seen of <...             True   
+<bound method RobotPlanner.stay of <robot.robot...            False   
+
+                                                   breaking_rule_ids  \
+<bound method RobotPlanner.go_to_last_seen of <...               [2]   
+<bound method RobotPlanner.stay of <robot.robot...                []   
+
+                                                   followee_autonomy  \
+<bound method RobotPlanner.go_to_last_seen of <...              -0.7   
+<bound method RobotPlanner.stay of <robot.robot...               1.0   
+
+                                                   followee_wellbeing  \
+<bound method RobotPlanner.go_to_last_seen of <...                0.7   
+<bound method RobotPlanner.stay of <robot.robot...           0.378911   
+
+                                                   robot_availability  
+<bound method RobotPlanner.go_to_last_seen of <...                1.0  
+<bound method RobotPlanner.stay of <robot.robot...                1.0  
+2023-11-06 18:44:37,402 - blackboard - Calling the final evaluator.
+2023-11-06 18:44:37,402 - PSRB_eldercare_evaluator - ethical_governor.blackboard.evaluator.PSRB_eldercare_evaluator started evaluation using the data in the blackboard.
+2023-11-06 18:44:37,402 - PSRB_eldercare_evaluator - Evaluating action: <bound method RobotPlanner.go_to_last_seen of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:44:38,473 - blackboard - Loaded the data to the blackboard.
+2023-11-06 18:44:38,474 - blackboard - Starting tests...
+2023-11-06 18:44:38,486 - blackboard - Running Deontology test.
+2023-11-06 18:44:38,486 - elder_care_deontology_test - Running ethical_governor.blackboard.ethicaltests.elder_care_deontology_test...
+2023-11-06 18:44:38,486 - elder_care_deontology_test - Testing action: <bound method RobotPlanner.go_to_last_seen of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:44:38,487 - elder_care_deontology_test - Variable: stakeholders.followee.seen_locationnot found in env.
+2023-11-06 18:44:38,487 - elder_care_deontology_test - Action <bound method RobotPlanner.go_to_last_seen of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>> : Not permissible since it broke rules [2]
+2023-11-06 18:44:38,487 - elder_care_deontology_test - Testing action: <bound method RobotPlanner.stay of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:44:38,487 - elder_care_deontology_test - Variable: stakeholders.followee.seen_locationnot found in env.
+2023-11-06 18:44:38,489 - elder_care_deontology_test - Action <bound method RobotPlanner.stay of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>> : Permissible
+2023-11-06 18:44:38,489 - elder_care_deontology_test - ethical_governor.blackboard.ethicaltests.elder_care_deontology_test finished.
+2023-11-06 18:44:38,490 - blackboard - Blackboard updated with Deontology test results.
+2023-11-06 18:44:38,491 - blackboard - Running Utilitarian test.
+2023-11-06 18:44:38,491 - elder_care_utilitarian_test - Running ethical_governor.blackboard.ethicaltests.elder_care_utilitarian_test...
+2023-11-06 18:44:38,491 - elder_care_utilitarian_test - Testing action: <bound method RobotPlanner.go_to_last_seen of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:44:38,782 - elder_care_utilitarian_test - Testing action: <bound method RobotPlanner.stay of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:44:39,007 - blackboard - Blackboard updated with Utilitarian test results.
+2023-11-06 18:44:39,007 - blackboard - Testing completed.
+2023-11-06 18:44:39,014 - data_structure - 
+                                                   desirability_score  \
+<bound method RobotPlanner.go_to_last_seen of <...                NaN   
+<bound method RobotPlanner.stay of <robot.robot...                NaN   
+
+                                                   is_breaking_rule  \
+<bound method RobotPlanner.go_to_last_seen of <...             True   
+<bound method RobotPlanner.stay of <robot.robot...            False   
+
+                                                   breaking_rule_ids  \
+<bound method RobotPlanner.go_to_last_seen of <...               [2]   
+<bound method RobotPlanner.stay of <robot.robot...                []   
+
+                                                   followee_autonomy  \
+<bound method RobotPlanner.go_to_last_seen of <...              -0.7   
+<bound method RobotPlanner.stay of <robot.robot...               1.0   
+
+                                                   followee_wellbeing  \
+<bound method RobotPlanner.go_to_last_seen of <...                0.7   
+<bound method RobotPlanner.stay of <robot.robot...           0.376738   
+
+                                                   robot_availability  
+<bound method RobotPlanner.go_to_last_seen of <...                1.0  
+<bound method RobotPlanner.stay of <robot.robot...                1.0  
+2023-11-06 18:44:39,014 - blackboard - Calling the final evaluator.
+2023-11-06 18:44:39,014 - PSRB_eldercare_evaluator - ethical_governor.blackboard.evaluator.PSRB_eldercare_evaluator started evaluation using the data in the blackboard.
+2023-11-06 18:44:39,014 - PSRB_eldercare_evaluator - Evaluating action: <bound method RobotPlanner.go_to_last_seen of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:44:39,619 - blackboard - Loaded the data to the blackboard.
+2023-11-06 18:44:39,620 - blackboard - Starting tests...
+2023-11-06 18:44:39,629 - blackboard - Running Deontology test.
+2023-11-06 18:44:39,629 - elder_care_deontology_test - Running ethical_governor.blackboard.ethicaltests.elder_care_deontology_test...
+2023-11-06 18:44:39,629 - elder_care_deontology_test - Testing action: <bound method RobotPlanner.go_to_last_seen of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:44:39,630 - elder_care_deontology_test - Variable: stakeholders.followee.seen_locationnot found in env.
+2023-11-06 18:44:39,630 - elder_care_deontology_test - Action <bound method RobotPlanner.go_to_last_seen of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>> : Not permissible since it broke rules [2]
+2023-11-06 18:44:39,630 - elder_care_deontology_test - Testing action: <bound method RobotPlanner.stay of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:44:39,631 - elder_care_deontology_test - Variable: stakeholders.followee.seen_locationnot found in env.
+2023-11-06 18:44:39,631 - elder_care_deontology_test - Action <bound method RobotPlanner.stay of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>> : Permissible
+2023-11-06 18:44:39,632 - elder_care_deontology_test - ethical_governor.blackboard.ethicaltests.elder_care_deontology_test finished.
+2023-11-06 18:44:39,633 - blackboard - Blackboard updated with Deontology test results.
+2023-11-06 18:44:39,633 - blackboard - Running Utilitarian test.
+2023-11-06 18:44:39,634 - elder_care_utilitarian_test - Running ethical_governor.blackboard.ethicaltests.elder_care_utilitarian_test...
+2023-11-06 18:44:39,634 - elder_care_utilitarian_test - Testing action: <bound method RobotPlanner.go_to_last_seen of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:44:39,786 - elder_care_utilitarian_test - Testing action: <bound method RobotPlanner.stay of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>
+2023-11-06 18:44:39,983 - blackboard - Blackboard updated with Utilitarian test results.
+2023-11-06 18:44:39,983 - blackboard - Testing completed.
+2023-11-06 18:44:39,989 - data_structure - 
+                                                   desirability_score  \
+<bound method RobotPlanner.go_to_last_seen of <...                NaN   
+<bound method RobotPlanner.stay of <robot.robot...                NaN   
+
+                                                   is_breaking_rule  \
+<bound method RobotPlanner.go_to_last_seen of <...             True   
+<bound method RobotPlanner.stay of <robot.robot...            False   
+
+                                                   breaking_rule_ids  \
+<bound method RobotPlanner.go_to_last_seen of <...               [2]   
+<bound method RobotPlanner.stay of <robot.robot...                []   
+
+                                                   followee_autonomy  \
+<bound method RobotPlanner.go_to_last_seen of <...              -0.7   
+<bound method RobotPlanner.stay of <robot.robot...               1.0   
+
+                                                   followee_wellbeing  \
+<bound method RobotPlanner.go_to_last_seen of <...                0.7   
+<bound method RobotPlanner.stay of <robot.robot...           0.375761   
+
+                                                   robot_availability  
+<bound method RobotPlanner.go_to_last_seen of <...                1.0  
+<bound method RobotPlanner.stay of <robot.robot...                1.0  
+2023-11-06 18:44:39,989 - blackboard - Calling the final evaluator.
+2023-11-06 18:44:39,989 - PSRB_eldercare_evaluator - ethical_governor.blackboard.evaluator.PSRB_eldercare_evaluator started evaluation using the data in the blackboard.
+2023-11-06 18:44:39,989 - PSRB_eldercare_evaluator - Evaluating action: <bound method RobotPlanner.go_to_last_seen of <robot.robot_planner.RobotPlanner object at 0x000001ADC2AF7A90>>

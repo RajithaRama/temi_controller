@@ -15,11 +15,11 @@ class CBRFollowing(cbr.CBR):
         self.data_original = pd.DataFrame()
         self.dist_feature_map = {}
         self.value_diff_mat = vdm.VDM()
-        self.categorical_data_cols = ['follower_seen_location', 'last_seen_location', 'robot_location', 'time',
+        self.categorical_data_cols = ['followee_seen_location', 'last_seen_location', 'robot_location', 'time',
                                       'action']
-        self.numerical_data_cols = ['follower_time_since_last_seen', 'follower_health', 'follower_history', 'battery_level',
-                                    'follower_autonomy', 'follower_wellbeing',
-                                    'follower_availability']
+        self.numerical_data_cols = ['followee_time_since_last_seen', 'followee_health', 'followee_history', 'battery_level',
+                                    'followee_autonomy', 'followee_wellbeing',
+                                    'followee_availability']
         self.list_data_cols = ['not_follow_locations', 'instructions_given']
         self.encoder = OrdinalEncoder()
 
@@ -88,16 +88,16 @@ class CBRFollowing(cbr.CBR):
         query['battery_level'] = query['battery_level'] / 100
 
         try:
-            query['follower_time_since_last_seen'] = self.power_transformer_last_seen.transform(
-                query['follower_time_since_last_seen'].to_numpy().reshape(-1, 1))
+            query['followee_time_since_last_seen'] = self.power_transformer_last_seen.transform(
+                query['followee_time_since_last_seen'].to_numpy().reshape(-1, 1))
         except KeyError:
-            logger.warn('feature "follower_time_since_last_seen" not found in query.')
+            logger.warn('feature "followee_time_since_last_seen" not found in query.')
 
         try:
-            query['follower_history'] = self.power_transformer_history.transform(
-                query['follower_history'].to_numpy().reshape(-1, 1))
+            query['followee_history'] = self.power_transformer_history.transform(
+                query['followee_history'].to_numpy().reshape(-1, 1))
         except KeyError:
-            logger.warn('feature "follower_history" not found in query.')
+            logger.warn('feature "followee_history" not found in query.')
 
         # get the subset of cases that have the features
         required_col_names = q_col_names.insert(0, 'case_id')
@@ -163,14 +163,14 @@ class CBRFollowing(cbr.CBR):
         data['battery_level'] = data['battery_level'] / 100
 
         # Transforming time since last seen
-        last_seen_data = data['follower_time_since_last_seen'].to_numpy().reshape(-1, 1)
+        last_seen_data = data['followee_time_since_last_seen'].to_numpy().reshape(-1, 1)
         self.power_transformer_last_seen = PowerTransformer().fit(last_seen_data)
-        data['follower_time_since_last_seen'] = self.power_transformer_last_seen.transform(last_seen_data)
+        data['followee_time_since_last_seen'] = self.power_transformer_last_seen.transform(last_seen_data)
 
         # Transform history
-        history_data = data['follower_history'].to_numpy().reshape(-1, 1)
+        history_data = data['followee_history'].to_numpy().reshape(-1, 1)
         self.power_transformer_history = PowerTransformer().fit(history_data)
-        data['follower_history'] = self.power_transformer_history.transform(history_data)
+        data['followee_history'] = self.power_transformer_history.transform(history_data)
 
         return data
 

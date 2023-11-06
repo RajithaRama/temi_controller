@@ -55,7 +55,10 @@ class OpenHABConnect:
             return presence_detected_locations[0]
 
         else:
-            presence_detected_locations.remove(self.robot_location)
+            try:
+                presence_detected_locations.remove(self.robot_location)
+            except ValueError:
+                pass
             return presence_detected_locations[0]
 
 

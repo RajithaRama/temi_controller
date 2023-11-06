@@ -7,27 +7,29 @@ import ast
 import ethical_governor.blackboard.evaluator.evaluator as evaluator
 from ethical_governor.blackboard.commonutils.cbr.cbr_following import CBRFollowing
 
-CASE_BASE = os.path.join(os.getcwd(), 'ethical_governor', 'blackboard', 'commonutils', 'cbr', 'case_base_gen_bathroom.json')
-SCN_RANGE_JSON = os.path.join(os.getcwd(), 'ethical_governor', 'blackboard', 'commonutils', 'cbr', 'scenario_ranges_bathroom.json')
+CASE_BASE = os.path.join(os.getcwd(), 'ethical_governor', 'blackboard', 'commonutils', 'cbr',
+                         'case_base_gen_bathroom.json')
+SCN_RANGE_JSON = os.path.join(os.getcwd(), 'ethical_governor', 'blackboard', 'commonutils', 'cbr',
+                              'scenario_ranges_bathroom.json')
 
 cbr_context_data_feature_map = {
-    'seen': ['stakeholders', 'follower', 'seen'],
-    'follower_seen_location': ['stakeholders', 'follower', 'seen_location'],
-    'follower_time_since_last_seen': ['stakeholders', 'follower', 'last_seen_time'],
-    'last_seen_location': ['stakeholders', 'follower', 'last_seen_location'],
+    'seen': ['stakeholders', 'followee', 'seen'],
+    'followee_seen_location': ['stakeholders', 'followee', 'seen_location'],
+    'followee_time_since_last_seen': ['stakeholders', 'followee', 'last_seen_time'],
+    'last_seen_location': ['stakeholders', 'followee', 'last_seen_location'],
     'robot_location': ['stakeholders', 'robot', 'location'],
     'not_follow_request': ['stakeholders', 'robot', 'not_follow_request'],
     'not_follow_locations': ['stakeholders', 'robot', 'not_follow_locations'],
     'battery_level': ['stakeholders', 'robot', 'battery_level'],
     'instructions_given': ['stakeholders', 'robot', 'instruction_list'],
     "time": ['environment', 'time_of_day'],
-    "follower_health": ['environment', 'follower_health_score'],
-    "follower_history": ['environment', 'no_of_follower_emergencies_in_past']
+    "followee_health": ['environment', 'followee_health_score'],
+    "followee_history": ['environment', 'no_of_followee_emergencies_in_past']
 }
 
-cbr_table_data_features = ["follower_autonomy", "follower_wellbeing", "follower_availability", "action"]
+cbr_table_data_features = ["followee_autonomy", "followee_wellbeing", "followee_availability", "action"]
 
-DUMP_query = False # Set to True to dump the query to a xlsx file. While this is true evaluator will not run as intended.
+DUMP_query = True  # Set to True to dump the query to a xlsx file. While this is true evaluator will not run as intended.
 
 dropping_cases = []
 
@@ -46,8 +48,8 @@ class PSRBEvaluator(evaluator.Evaluator):
                     case_range = list(range(start, end + 1))
                     data_df = data_df[~data_df['case_id'].isin(case_range)]
 
-            data_df[['follower_autonomy', 'follower_wellbeing', 'robot_availability', 'follower_health']] = data_df[
-                ['follower_autonomy', 'follower_wellbeing', 'robot_availability', 'follower_health']].astype(float)
+            data_df[['followee_autonomy', 'followee_wellbeing', 'robot_availability', 'followee_health']] = data_df[
+                ['followee_autonomy', 'followee_wellbeing', 'robot_availability', 'followee_health']].astype(float)
             data_df['not_follow_locations'] = data_df['not_follow_locations'].apply(lambda x: self.convert_lists(x))
             data_df['instructions_given'] = data_df['instructions_given'].apply(lambda x: self.convert_lists(x))
             self.feature_list = self.expert_db.add_data(data_df)
@@ -78,15 +80,14 @@ class PSRBEvaluator(evaluator.Evaluator):
                         str(expert_intention) + ' intention')
             # print(expert_opinion)
 
-            wellbeing = data.get_table_data(action=action, column='follower_wellbeing')
-            autonomy = data.get_table_data(action=action, column='follower_autonomy')
+            wellbeing = data.get_table_data(action=action, column='followee_wellbeing')
+            autonomy = data.get_table_data(action=action, column='followee_autonomy')
             availability = data.get_table_data(action=action, column='robot_availability')
 
             # diff_wellbeing_autonomy = wellbeing - autonomy
             # diff_wellbeing_availability = wellbeing - availability
             # diff_autonomy_availability = autonomy - availability
-            
-                
+
             rule_broken = data.get_table_data(action=action, column='is_breaking_rule')
             if DUMP_query:
                 expert_opinion = not rule_broken
@@ -94,12 +95,12 @@ class PSRBEvaluator(evaluator.Evaluator):
             if expert_opinion and not rule_broken:
                 # When rules and expert both accept, accept
                 data.put_table_data(action=action, column='desirability_score', value=1)
-                logger.info("Action " + action.value[0].__name__ + ' desirability: 1' + '| Reason: no rules broken and '
-                                                                                       'accepted by experts.')
+                logger.info("Action " + action.value.__name__ + ' desirability: 1' + '| Reason: no rules broken and '
+                                                                                        'accepted by experts.')
             elif not expert_opinion and rule_broken:
                 # When rules and expert reject, reject
                 data.put_table_data(action=action, column='desirability_score', value=0)
-                logger.info("Action " + action.value[0].__name__ + ' desirability: 0' + '| Reason: rules ' + str(
+                logger.info("Action " + action.value.__name__ + ' desirability: 0' + '| Reason: rules ' + str(
                     data.get_table_data(action=action, column='breaking_rule_ids')) + ' broken and not '
                                                                                       'accepted by experts.')
             elif expert_opinion and rule_broken:
@@ -112,7 +113,7 @@ class PSRBEvaluator(evaluator.Evaluator):
                         threshold = (10 - self.character[value]) / 10
                         if eval(value) < threshold:
                             acceptability = 0
-                    
+
                     else:
                         threshold = (self.character[value] - 10) / 10
                         if eval(value) < threshold:
@@ -120,14 +121,15 @@ class PSRBEvaluator(evaluator.Evaluator):
                 data.put_table_data(action=action, column='desirability_score', value=acceptability)
 
                 if acceptability:
-                    logger.info("Action " + action.value[0].__name__ + ' desirability: 1' + '| Reason: rules ' + str(
+                    logger.info("Action " + action.value.__name__ + ' desirability: 1' + '| Reason: rules ' + str(
                         data.get_table_data(action=action, column='breaking_rule_ids')) + 'broken, but accepted by '
-                                                                                          'experts. Since it increases ' + str(expert_intention) + 'values greatly, deemed accepted by PSRB '
-                                                                                                                                              'system.')
+                                                                                          'experts. Since it increases ' + str(
+                        expert_intention) + 'values greatly, deemed accepted by PSRB '
+                                            'system.')
                 else:
-                    logger.info("Action " + action.value[0].__name__ + ' desirability: 0' + '| Reason: rules ' + str(
+                    logger.info("Action " + action.value.__name__ + ' desirability: 0' + '| Reason: rules ' + str(
                         data.get_table_data(action=action, column='breaking_rule_ids')) + 'broken, but accepted by '
-                        'experts. However, the value tradeoff is not satisfactory to bend the rule.')
+                                                                                          'experts. However, the value tradeoff is not satisfactory to bend the rule.')
             else:
                 # When rules accept and experts reject
                 acceptability = 1
@@ -138,21 +140,21 @@ class PSRBEvaluator(evaluator.Evaluator):
                 data.put_table_data(action=action, column='desirability_score', value=acceptability)
 
                 if acceptability:
-                    logger.info("Action " + action.value[0].__name__ + ' desirability: 1' + '| Reason: no rules broken, but not accepted by '
-                        'experts. However, PSRB system suggest the value tradeoff not enough to bend the rule.')
+                    logger.info("Action " + action.value.__name__ + ' desirability: 1' + '| Reason: no rules broken, but not accepted by '
+                                                           'experts. However, PSRB system suggest the value tradeoff not enough to bend the rule.')
 
                 else:
-                    logger.info("Action " + action.value[0].__name__ + ' desirability: 0 | Reason: no rules broken, but not accepted by '
-                        'experts. Since it decreases ' + str(expert_intention) + 'values too much, deemed not accepted by '
-                                                                                                                       'PSRB system.')
+                    logger.info("Action " + action.value.__name__ + ' desirability: 0 | Reason: no rules broken, but not accepted by '
+                                      'experts. Since it decreases ' + str(
+                        expert_intention) + 'values too much, deemed not accepted by '
+                                            'PSRB system.')
 
                 # for item1, item2 in itertools.combinations(self.charactor.keys(), 2):
                 #     if eval(item1) == eval(item2)
                 #     if item1(eval(item1)-eval(item2))/abs(eval(item1)-eval(item2)) == (self.charactor[item1] - self.charactor[
                 #         item2]) / abs((self.charactor[item1] - self.charactor[item2])):
             if DUMP_query:
-                data.put_table_data(action=action, column='desirability_score', value=not rule_broken) 
-
+                data.put_table_data(action=action, column='desirability_score', value=not rule_broken)
 
     def get_expert_opinion(self, action, data, logger):
         query = self.generate_query(action, data)
@@ -164,8 +166,9 @@ class PSRBEvaluator(evaluator.Evaluator):
         else:
             neighbours_with_dist = self.expert_db.get_neighbours_with_distances(query=query, logger=logger)
             logger.info('closest neighbours to the case are: ' + str(neighbours_with_dist))
-            vote, intention = self.expert_db.distance_weighted_vote(neighbours_with_dist=neighbours_with_dist, threshold=3,
-                                                                logger=logger)
+            vote, intention = self.expert_db.distance_weighted_vote(neighbours_with_dist=neighbours_with_dist,
+                                                                    threshold=3,
+                                                                    logger=logger)
 
         return vote, intention
 
@@ -176,22 +179,22 @@ class PSRBEvaluator(evaluator.Evaluator):
             if feature in ['case_id', 'acceptability', 'intention']:
                 continue
             if feature == 'action':
-                query[feature] = [action.value[0].__name__] 
+                query[feature] = [action.value.__name__]
                 continue
             try:
                 path = cbr_context_data_feature_map[feature]
             except KeyError:
                 path = None
             if path:
-                if feature == "follower_time_since_last_seen":
+                if feature == "followee_time_since_last_seen":
                     last_seen_time = data.get_data(path) if data.get_data(path) is not None else 0
-                    value = data.get_data(['environment', 'time']) - last_seen_time
-                elif feature=="instructions_given": 
+                    value = (data.get_data(['environment', 'time']) - last_seen_time)/60 # (in minutes)
+                elif feature == "instructions_given":
                     value = data.get_data(path)
                     if value == None:
                         value = []
                     else:
-                        value = [instruction for instruction, issuer in value]
+                        value = [ins.command for ins in value]
                 else:
                     value = data.get_data(path)
             else:
@@ -211,14 +214,15 @@ class PSRBEvaluator(evaluator.Evaluator):
         queries = pd.concat(self.query_list, ignore_index=True)
         queries.to_excel('query_dump.xlsx', sheet_name='query')
 
+
 if __name__ == '__main__':
     ex1 = PSRBEvaluator()
     neighbours = ex1.expert_db.get_neighbours_with_distances(
         pd.DataFrame(data=[[1, 'bedroom', 0, 'bedroom', 'bedroom', 0, [], 40, [], 'day', 0, -1, 0, 'stay']],
-                     columns=['seen', 'follower_seen_location', 'follower_time_since_last_seen', 'last_seen_location',
+                     columns=['seen', 'followee_seen_location', 'followee_time_since_last_seen', 'last_seen_location',
                               'robot_location', 'not_follow_request', 'not_follow_locations', 'battery_level',
-                              'instructions_given', 'time', 'follower_autonomy', 'follower_wellbeing',
-                              'follower_availability', 'action']))
+                              'instructions_given', 'time', 'followee_autonomy', 'followee_wellbeing',
+                              'followee_availability', 'action']))
     # print(neighbours)
 
     vote = ex1.expert_db.distance_weighted_vote(neighbours_with_dist=neighbours, threshold=3, logger=None)

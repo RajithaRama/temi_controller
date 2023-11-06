@@ -1,5 +1,5 @@
-import mqtt_client
-import openhab_client
+import robot.mqtt_client as mqtt_client
+import robot.openhab_client as openhab_client
 import time
 import networkx as nx
 
@@ -104,6 +104,9 @@ class RobotController:
 
         self.not_follow_locations = []
 
+        self.robot_last_known_location = None
+        self.robot_last_behaviour = None
+
         self.followee_last_seen_time = None
         self.followee_last_known_location = None
         self.followee_last_known_time = None
@@ -113,13 +116,13 @@ class RobotController:
         self.followee_health_score = 1
 
         self.follower_avg_time_and_std_in_rooms = {'bathroom': (20, 10), 'kitchen': (60, 10),
-                                                   'hall': (10, 5), 'bedroom': (20, 10), 'bedroom_close_bed': (60, 15)}
+                                                   'hall': (10, 5), 'bedroom-a': (20, 10), 'bedroom-a bed': (60, 15)}
         self.time_of_day = 'day'
 
     def get_perception_data(self):
         perception_data = PerceptionData()
 
-        # perception_data.robot.battery_level = self.get_battery_level()
+        perception_data.robot.battery_level = self.get_battery_level()
         perception_data.robot.location = self.get_location()
         # perception_data.robot.pos = self.get_pos()
         perception_data.robot.instruction_list = self.get_instruction_list()
@@ -138,7 +141,7 @@ class RobotController:
         perception_data.time_of_day = self.get_time_of_day()
         perception_data.followee_history = self.get_followee_history()
         perception_data.followee_health_score = self.get_followee_health_score()
-        perception_data.map = self.get_map(1, followee_location=perception_data.followee.location, robot_location=perception_data.robot.location)
+        perception_data.map = self.get_map(1)
 
         return perception_data
 
@@ -146,37 +149,46 @@ class RobotController:
     def follow(self):
         # Follow the user
         self.robot.follow()
+        self.robot_last_known_location = self.followee_last_known_location
         pass
 
     def go_to_last_seen(self):
         # Go to the last seen location
         self.robot.go_to_location(self.followee_last_known_location)
+        self.robot_last_known_location = self.followee_last_known_location
         pass
 
     def go_to_location(self, location):
         # Move to the closest allowed location.
         self.robot.go_to_location(location)
+        self.robot_last_known_location = location
         pass
 
     def stay(self):
         # Stay in the same place
-        self.robot.get_robot_location()
+        self.go_to_location(self.robot.get_robot_location())
         pass
 
     def go_to_charge(self):
         # Go to the charging station
         self.robot.go_to_location("home base")
+        self.robot_last_known_location("home base")
         pass
 
     # Note: Replace spaces in the variables with '_'
     ############# getters ###############
     def get_battery_level(self):
         # Get the battery level
+        # TODO: Change after the feature update to the robot
+        return 100
         pass
 
     def get_location(self):
         # Get the current location
-        return self.robot.get_robot_location()
+        # TODO: Change after get the feature implemented in the robot
+        # return self.robot.get_robot_location()
+        # returning the last known location
+        return self.robot_last_known_location
 
     def get_pos(self):
         # Get the current position
@@ -185,19 +197,26 @@ class RobotController:
     def get_instruction_list(self):
         # Get the list of instructions
         # Hardcoded instructions for now
-        instructions = [Instruction(command='do_not_follow_to', objects='bathroom'),
-                        Instruction(command='do_not_follow_to', objects='bedroom-a bed'),
-                        Instruction(command='do_not_follow_to', objects='bedroom-b bed')]
+        instructions = [Instruction(command='do_not_follow_to', objects=['bathroom']),
+                        Instruction(command='do_not_follow_to', objects=['bedroom-a bed']),
+                        Instruction(command='do_not_follow_to', objects=['bedroom-b bed'])]
         return instructions
 
     def get_followee_seen(self):
         # Get whether the followee is seen
+        # TODO: Implement the more accurate one after the feature implemented in the robot
+        # if the robot is in the followee location or last known location, assuming the robot sees the resident
+        robot_loc = self.get_location()
+        if robot_loc is not None:
+            if robot_loc == self.get_followee_location():
+                return True
+            if robot_loc == self.get_followee_last_known_location():
+                return True
         pass
 
     def get_followee_pos(self):
         # Get the followee position
         pass
-
     def get_followee_location(self):
         # Get the followee location
         try:
@@ -251,7 +270,7 @@ class RobotController:
         self.map.set_followee_location(self.get_followee_location())
         return self.map
 
-    def get_follower_avg_times_and_stds(self):
+    def get_followee_avg_times_and_stds(self):
         # Get the average times and stds
         return self.follower_avg_time_and_std_in_rooms
 
