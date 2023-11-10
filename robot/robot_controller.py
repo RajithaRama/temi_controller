@@ -48,9 +48,15 @@ lab_location_data = {
     'living room': {'bedroom-b': {'weight': 1}, 'bedroom-b bed': {'weight': 1}},
     'bedroom-b': {'bedroom-b bed': {'weight': 1}, 'bedroom-a': {'weight': 1}},
     'bedroom-b bed': {'bedroom-a': {'weight': 1}},
-    'bedroom-a': {'bedroom-a bed': {'weight': 1}, 'bathroom': {'weight': 2}},
+    'bedroom-a': {'bedroom-a bed': {'weight': 1}, 'bathroom': {'weight': 1}},
 }
-
+lab_location_boundries = {
+    'home base': [((0.00, 0.3), (-0.4, 0.3))],
+    'kitchen': [((0.263,2), (-3.6, -0.9)), ((2.2, 8), (0, 1))],
+    'bathroom': [((3.9, 6.2), (-3, -0.2))],
+    'bedroom-a': [((6.2, 7.6), (-3.1, -0.15))],
+    'bedroom-a bed': [((7.6, 8), (-1.6, -0.2))]
+}
 
 class map:
     def __init__(self, map_id, location_data=lab_location_data, map_area=None, home_coordinates=None) -> None:
@@ -98,7 +104,7 @@ class RobotController:
         # self.robot = mqtt_client.MQTTConnect(client_address=robot)
         self.robot = openhab_client.OpenHABConnect(
             locations=['bathroom', 'bedroom-a', 'bedroom-b', 'bedroom-a bed', 'bedroom-b bed', 'living room',
-                       'dining table', 'kitchen'])
+                       'dinning table', 'kitchen'])
         # Connect to the robot
         self.robot.connect()
 
@@ -116,15 +122,20 @@ class RobotController:
         self.followee_health_score = 1
 
         self.follower_avg_time_and_std_in_rooms = {'bathroom': (20, 10), 'kitchen': (60, 10),
-                                                   'hall': (10, 5), 'bedroom-a': (20, 10), 'bedroom-a bed': (60, 15)}
+                                                   'living room': (60, 10), 'bedroom-a': (20, 10),
+                                                   'bedroom-a bed': (60, 15), 'bedroom-b': (20, 10),
+                                                   'bedroom-b bed': (60, 15), 'dinning table': (30, 10)}
         self.time_of_day = 'day'
+
+        self.battery = 100
+        self.step = 0
 
     def get_perception_data(self):
         perception_data = PerceptionData()
 
         perception_data.robot.battery_level = self.get_battery_level()
         perception_data.robot.location = self.get_location()
-        # perception_data.robot.pos = self.get_pos()
+        perception_data.robot.pos = self.get_pos()
         perception_data.robot.instruction_list = self.get_instruction_list()
         perception_data.robot.not_follow_locations = self.get_not_follow_locations()
         # perception_data.robot.not_follow_request = self.get_not_follow_request()
@@ -148,51 +159,107 @@ class RobotController:
     ############# actions ###############
     def follow(self):
         # Follow the user
-        self.robot.follow()
+        self.robot.follow(True)
         self.robot_last_known_location = self.followee_last_known_location
+        self.robot_last_behaviour = self.follow
         pass
 
     def go_to_last_seen(self):
         # Go to the last seen location
-        self.robot.go_to_location(self.followee_last_known_location)
-        self.robot_last_known_location = self.followee_last_known_location
-        pass
+        self.stop_last_behaviour()
+        ret = self.robot.go_to_location(self.followee_last_known_location)
+        if ret == 1:
+            self.robot_last_known_location = self.followee_last_known_location
+            self.robot_last_behaviour = self.go_to_last_seen
+            return 1
+        else:
+            self.robot.go_to_location(self.robot_last_known_location)
+            return -1
 
     def go_to_location(self, location):
         # Move to the closest allowed location.
-        self.robot.go_to_location(location)
-        self.robot_last_known_location = location
-        pass
+        ret = self.robot.go_to_location(location)
+        self.stop_last_behaviour()
+        if ret == 1:
+            self.robot_last_known_location = location
+        else:
+            self.robot.go_to_location(self.robot_last_known_location)
+        self.robot_last_behaviour = self.go_to_location
 
     def stay(self):
         # Stay in the same place
-        self.go_to_location(self.robot.get_robot_location())
-        pass
+        if self.robot_last_behaviour == self.follow:
+            self.robot.follow(on=False)
+            return 1
+        elif self.robot_last_behaviour == self.go_to_location:
+            current_location = self.get_location()
+            if current_location is not None:
+                return 1
+            else:
+                return self.go_to_location(self.robot_last_known_location)
 
     def go_to_charge(self):
         # Go to the charging station
+        self.stop_last_behaviour()
         self.robot.go_to_location("home base")
-        self.robot_last_known_location("home base")
+        self.robot_last_known_location = "home base"
+        self.robot_last_behaviour = self.go_to_charge
         pass
+
+    def stop_last_behaviour(self):
+        if self.robot_last_behaviour == self.follow:
+            self.robot.follow(False)
 
     # Note: Replace spaces in the variables with '_'
     ############# getters ###############
     def get_battery_level(self):
         # Get the battery level
-        # TODO: Change after the feature update to the robot
-        return 100
-        pass
+
+        # return self.robot.get_battery_level()
+        # custom battery value for simulations
+        if self.get_location() == 'home base':
+            if self.battery < 98:
+                self.battery += 2
+        else:
+            self.battery -= 0.2
+
+        return self.battery
+
 
     def get_location(self):
         # Get the current location
-        # TODO: Change after get the feature implemented in the robot
-        # return self.robot.get_robot_location()
-        # returning the last known location
-        return self.robot_last_known_location
+        # Workaround: if the robot is in the followee location or last known location, assuming the robot sees the resident
+
+        # if self.robot_last_behaviour == self.follow and self.robot.get_resident_seen():
+        #     location = self.get_followee_location()
+        #     return location if location is not None else self.followee_last_known_location
+        # else:
+        #     location = self.robot.get_robot_location()
+        #     # returning the last known location
+        #     if location is not None:
+        #         self.robot_last_known_location = location
+        #         return location
+        #     else:
+        #         return self.robot_last_known_location
+
+        pos = self.get_pos()
+        if pos is not None:
+            for location, boundries in lab_location_boundries.items():
+                for boundry in boundries:
+                    if boundry[0][0] < pos[0] < boundry[0][1] and boundry[1][0] < pos[1] < boundry[1][1]:
+                        return location
+            # if not found in boundries
+            location = self.robot.get_robot_location()
+                # returning the last known location
+            if location is not None:
+                self.robot_last_known_location = location
+                return location
+            else:
+                return self.robot_last_known_location
 
     def get_pos(self):
         # Get the current position
-        pass
+        return self.robot.get_robot_position()
 
     def get_instruction_list(self):
         # Get the list of instructions
@@ -204,19 +271,33 @@ class RobotController:
 
     def get_followee_seen(self):
         # Get whether the followee is seen
-        # TODO: Implement the more accurate one after the feature implemented in the robot
-        # if the robot is in the followee location or last known location, assuming the robot sees the resident
-        robot_loc = self.get_location()
-        if robot_loc is not None:
-            if robot_loc == self.get_followee_location():
+        # Workaround: if the robot is in the followee location or last known location, assuming the robot sees the resident
+        # robot_loc = self.get_location()
+        # if robot_loc is not None:
+        #     if robot_loc == self.get_followee_location():
+        #         return True
+        #     if robot_loc == self.get_followee_last_known_location():
+        #         return True
+        seen = self.robot.get_resident_seen()
+        if seen:
+            self.followee_last_seen_time = self.get_time()
+            self.followee_last_known_time = self.get_time()
+            return seen
+        else:
+            if self.get_followee_location() == "bedroom-a bed":
+                self.followee_last_seen_time = self.get_time()
+                self.followee_last_known_time = self.get_time()
                 return True
-            if robot_loc == self.get_followee_last_known_location():
+            elif self.followee_last_known_location is not None and self.followee_last_known_location == self.get_location():
                 return True
-        pass
+            else:
+                return False
+        # return self.robot.get_resident_seen()
 
     def get_followee_pos(self):
         # Get the followee position
         pass
+
     def get_followee_location(self):
         # Get the followee location
         try:
@@ -276,6 +357,11 @@ class RobotController:
 
     def get_not_follow_locations(self):
         # Get the not follow locations
+        self.not_follow_locations = []
+        for instruction in self.get_instruction_list():
+            if instruction.command == "do_not_follow_to":
+                self.not_follow_locations.append(instruction.objects[0])
+
         return self.not_follow_locations
 
     def get_not_follow_request(self):
@@ -288,11 +374,19 @@ class RobotController:
 
     def get_shortest_distance(self, start, target):
         # Get the shortest distance between two points
-        self.map.get_shortest_path_distance(start=start, end=target)
+        return self.map.get_shortest_path_distance(start=start, end=target)
         pass
+
 
 
 if __name__ == "__main__":
     controller = RobotController()
-    map = controller.get_map(1, "home base", "bedroom-a")
-    close_loc = map.get_closest_locations('kitchen')
+    map = controller.get_map(1)
+    # print(map.location_data)
+
+    print(controller.get_location())
+    controller.robot.follow(on=True)
+    time.sleep(10)
+    controller.robot.follow(on=False)
+    print(controller.get_location())
+    close_loc = map.get_node_distance_sorted('kitchen')

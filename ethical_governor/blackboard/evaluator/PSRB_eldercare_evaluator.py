@@ -29,7 +29,7 @@ cbr_context_data_feature_map = {
 
 cbr_table_data_features = ["followee_autonomy", "followee_wellbeing", "followee_availability", "action"]
 
-DUMP_query = True  # Set to True to dump the query to a xlsx file. While this is true evaluator will not run as intended.
+DUMP_query = False   # Set to True to dump the query to a xlsx file. While this is true evaluator will not run as intended.
 
 dropping_cases = []
 
@@ -51,7 +51,7 @@ class PSRBEvaluator(evaluator.Evaluator):
             data_df[['followee_autonomy', 'followee_wellbeing', 'robot_availability', 'followee_health']] = data_df[
                 ['followee_autonomy', 'followee_wellbeing', 'robot_availability', 'followee_health']].astype(float)
             data_df['not_follow_locations'] = data_df['not_follow_locations'].apply(lambda x: self.convert_lists(x))
-            data_df['instructions_given'] = data_df['instructions_given'].apply(lambda x: self.convert_lists(x))
+            # data_df['instructions_given'] = data_df['instructions_given'].apply(lambda x: self.convert_lists(x))
             self.feature_list = self.expert_db.add_data(data_df)
 
         if DUMP_query:
@@ -157,7 +157,7 @@ class PSRBEvaluator(evaluator.Evaluator):
                 data.put_table_data(action=action, column='desirability_score', value=not rule_broken)
 
     def get_expert_opinion(self, action, data, logger):
-        query = self.generate_query(action, data)
+        query = self.generate_query(action, data, logger)
         # print(query)
         if DUMP_query:
             self.dump_query(query)
@@ -172,7 +172,7 @@ class PSRBEvaluator(evaluator.Evaluator):
 
         return vote, intention
 
-    def generate_query(self, action, data):
+    def generate_query(self, action, data, logger):
         query = pd.DataFrame()
         for feature in self.feature_list:
             value = None
@@ -188,7 +188,7 @@ class PSRBEvaluator(evaluator.Evaluator):
             if path:
                 if feature == "followee_time_since_last_seen":
                     last_seen_time = data.get_data(path) if data.get_data(path) is not None else 0
-                    value = (data.get_data(['environment', 'time']) - last_seen_time)/60 # (in minutes)
+                    value = (data.get_data(['environment', 'time']) - last_seen_time)/3 # (in minutes) (changed to speed up the simulation for testing)
                 elif feature == "instructions_given":
                     value = data.get_data(path)
                     if value == None:
@@ -205,6 +205,7 @@ class PSRBEvaluator(evaluator.Evaluator):
                     query[feature] = [value]
                 continue
             query[feature] = [value]
+        logger.info(query)
         return query
 
     def dump_query(self, query):

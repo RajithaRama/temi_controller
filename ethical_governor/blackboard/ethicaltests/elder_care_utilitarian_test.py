@@ -133,7 +133,7 @@ class ElderCareUtilitarianTest(ethical_test.EthicalTest):
             next_loc = stakeholder_data['followee']['last_seen_location']
         elif action.value.__name__ == 'stay':
             next_loc = current_loc
-        elif action.value.__name__ == 'charge':
+        elif action.value.__name__ == 'go_to_charge':
             next_loc = 'home_base'
         elif action.value.__name__ == 'move_away':
             next_loc = action.value(sim=True)
@@ -169,14 +169,16 @@ class ElderCareUtilitarianTest(ethical_test.EthicalTest):
                 # Simulating next pos and visible lines
                 next_loc = self.simulate(env, stakeholder_data, action)
 
-                # seen = if next_loc == data['']
-                if data['seen']:
+                # if next_loc == data['last_seen_location']:
+                #     seen = True
+                seen = True if next_loc == data['last_seen_location'] else False
+                if seen:
                     wellbeing_util = 1.0
 
                 else:
                     time = env['time']
                     last_seen_time = data['last_seen_time']
-                    x = (time - last_seen_time) / 30
+                    x = (time - last_seen_time) / 3 # (usually keep at 30)
                     m, n = env['followee_avg_time_and_std_in_rooms'][data['last_seen_location']]  # avg time not visible to robot
                     num_emer = env['no_of_followee_emergencies_in_past']
                     t = 1 / (1 + np.exp(num_emer - 2))
